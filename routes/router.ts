@@ -1,7 +1,38 @@
 import { Router,Request,Response} from 'express';
+import{mapa} from '../sockets/socket'
+import Server from '../clases/server';
+
 
 
 const router= Router();
+
+
+
+//mapa
+
+router.get('/label',(req:Request,res:Response)=>{
+
+    res.json(mapa.getLabelParadas());
+
+});
+
+router.get('/mapa',(req:Request,res:Response)=>{
+
+    res.json(mapa.getMarcadores());
+
+});
+
+router.get('/rutas',(req:Request,res:Response)=>{
+
+    res.json(mapa.getRoutes());
+
+});
+
+router.get('/paradas',(req:Request,res:Response)=>{
+
+    res.json(mapa.getParadas());
+
+});
 
 
 router.get('/mensajes',(req:Request,res:Response)=>{
@@ -41,7 +72,7 @@ router.post('/mensajes/:id',(req:Request,res:Response)=>{
 
     res.json({
         ok:true,
-        cuerpo,
+        cuerpo, 
         de,
         id
 
