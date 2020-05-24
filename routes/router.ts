@@ -1,6 +1,8 @@
 import { Router,Request,Response} from 'express';
 import{mapa} from '../sockets/socket'
 import Server from '../clases/server';
+import { Socket } from 'socket.io';
+import { usuariosconectados } from '../sockets/socket';
 
 
 
@@ -94,6 +96,44 @@ router.post('/mensajes/:id',(req:Request,res:Response)=>{
         id
 
     });
+
+
+});
+
+router.get('/usuarios',(req:Request,res:Response)=>{
+
+    const server = Server.instance;
+
+server.io.clients((err:any,clientes:string)=>{
+    if(err){
+        return res.json({
+            ok:false,
+            err
+        })
+    }
+
+
+    res.json({
+        ok:true,
+        clientes
+
+    });
+
+});
+});
+
+///obtener usuarios y sus nombres
+router.get('/usuarios/detalle',(req:Request,res:Response)=>{
+
+    
+
+
+    res.json({
+        
+        ok:true,
+        clientes:usuariosconectados.getLista()
+
+    }); 
 
 
 });

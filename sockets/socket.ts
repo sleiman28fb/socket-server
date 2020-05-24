@@ -9,16 +9,19 @@ import { Usuario } from '../clases/usuarios';
 export const mapa = new Mapa();
 export const usuariosconectados = new Usuariolista();
 
-export const conectarCliente = (cliente:Socket)=>{
+export const conectarCliente = (cliente:Socket, io:socketIO.Server)=>{
     const usuario = new Usuario(cliente.id);
     usuariosconectados.agregar(usuario);
+
 }
 
-export const desconectar = (cliente:Socket)=>{
+export const desconectar = (cliente:Socket,io:socketIO.Server)=>{
 
 cliente.on('disconnect', ()=>{
     console.log('cliente desconectado');
     usuariosconectados.borrarUsuario(cliente.id);
+    io.emit('usuarios-activos',usuariosconectados.getLista());
+    
 });
 
 }
@@ -38,7 +41,10 @@ export const usuario = (cliente: Socket,io:socketIO.Server)=>{
     cliente.on('configurar-usuario', (payload:{nombre:string},callback:Function)=>{
     console.log('configurar-usuario', payload.nombre);
 
-    usuariosconectados.actualizarNombre(cliente.id,payload.nombre)
+    usuariosconectados.actualizarNombre(cliente.id,payload.nombre);
+    io.emit('usuarios-activos',usuariosconectados.getLista());
+
+
     callback({
         ok:true,
         mensaje:`usuario ${payload.nombre}, configurado`
@@ -46,7 +52,20 @@ export const usuario = (cliente: Socket,io:socketIO.Server)=>{
 
   //  io.emit('mensaje-nuevo', payload);
 });
+
 }
+
+export const Obtenerusuarios = (cliente: Socket,io:socketIO.Server)=>{
+
+    cliente.on('obtener-usuario', ()=>{
+
+    io.to(cliente.id).emit('usuarios-activos',usuariosconectados.getLista());
+  //  io.emit('mensaje-nuevo', payload);
+});
+}
+
+
+
 
 /////Eventos Mapas 
 

@@ -38,7 +38,9 @@ import * as socket from '../sockets/socket';
         this.io.on('connection',cliente=>{
           // conectar cliente 
 
-          socket.conectarCliente(cliente);
+          socket.conectarCliente(cliente,this.io);
+
+          socket.Obtenerusuarios(cliente,this.io)
 
 
             // login- configurar usuario 
@@ -53,7 +55,7 @@ import * as socket from '../sockets/socket';
 
          // descnectar 
 
-         socket.desconectar(cliente);
+         socket.desconectar(cliente,this.io);
 
          // mensajes 
 
