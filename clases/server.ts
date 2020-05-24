@@ -36,11 +36,20 @@ import * as socket from '../sockets/socket';
 
         console.log('escuchando coneciones');
         this.io.on('connection',cliente=>{
+          // conectar cliente 
 
-            ///configuracion de mapas
+          socket.conectarCliente(cliente);
 
-           socket.mapaSockets(cliente,this.io);
+
+            // login- configurar usuario 
+
+         socket.usuario(cliente,this.io);
+
+        ///configuracion de mapas
+
+         socket.mapaSockets(cliente,this.io);
          console.log('cliente conectado');
+         console.log(cliente.id);
 
          // descnectar 
 
@@ -49,6 +58,8 @@ import * as socket from '../sockets/socket';
          // mensajes 
 
          socket.mensaje(cliente,this.io);
+
+    
 
         
 });
